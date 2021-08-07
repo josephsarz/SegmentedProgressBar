@@ -1,11 +1,17 @@
 package pt.tornelas.segmentedprogressbar.pager
 
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class PagerAdapter(fragmentManager: FragmentManager, private val items: List<Int>): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class PagerAdapter(fragmentActivity: FragmentActivity, private val items: List<Int>): FragmentStateAdapter(fragmentActivity) {
 
-    override fun getItem(position: Int) = PageFragment.newInstance(items[position])
 
-    override fun getCount() = items.size
+    override fun getItemCount(): Int = items.size
+
+    override fun createFragment(position: Int): Fragment {
+        return PageFragment()
+    }
 }

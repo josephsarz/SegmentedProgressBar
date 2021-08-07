@@ -18,7 +18,7 @@ class StandardExampleActivity : AppCompatActivity() {
 
         val items = dataSource()
 
-        viewPager.adapter = PagerAdapter(supportFragmentManager, items)
+        viewPager.adapter = PagerAdapter(this, items)
         spb.viewPager = viewPager
 
         spb.segmentCount = items.size

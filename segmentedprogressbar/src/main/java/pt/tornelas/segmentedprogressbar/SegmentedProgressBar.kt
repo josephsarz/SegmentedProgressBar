@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 
 /**
  * Created by Tiago Ornelas on 18/04/2020.
@@ -16,7 +17,14 @@ import androidx.viewpager.widget.ViewPager
  * @see Segment
  * And the progress of each segment is animated based on a set speed
  */
-class SegmentedProgressBar : View, Runnable, ViewPager.OnPageChangeListener, View.OnTouchListener {
+class SegmentedProgressBar : View, Runnable, View.OnTouchListener {
+
+
+    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            setPosition(position)
+        }
+    }
 
     /**
      * Number of total segments to draw
@@ -66,15 +74,15 @@ class SegmentedProgressBar : View, Runnable, ViewPager.OnPageChangeListener, Vie
     val segmentWidth: Float
         get() = (measuredWidth - margin * (segmentCount - 1)).toFloat() / segmentCount
 
-    var viewPager: ViewPager? = null
+    var viewPager: ViewPager2? = null
         @SuppressLint("ClickableViewAccessibility")
         set(value) {
             field = value
             if (value == null) {
-                viewPager?.removeOnPageChangeListener(this)
+                viewPager?.unregisterOnPageChangeCallback(onPageChangeCallback)
                 viewPager?.setOnTouchListener(null)
             } else {
-                viewPager?.addOnPageChangeListener(this)
+                viewPager?.registerOnPageChangeCallback(onPageChangeCallback)
                 viewPager?.setOnTouchListener(this)
             }
         }
@@ -287,13 +295,13 @@ class SegmentedProgressBar : View, Runnable, ViewPager.OnPageChangeListener, Vie
         }
     }
 
-    override fun onPageScrollStateChanged(state: Int) {}
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-    override fun onPageSelected(position: Int) {
-        this.setPosition(position)
-    }
+//    override fun onPageScrollStateChanged(state: Int) {}
+//
+//    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+//
+//    override fun onPageSelected(position: Int) {
+//        this.setPosition(position)
+//    }
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
         when (p1?.action){
